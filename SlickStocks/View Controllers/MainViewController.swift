@@ -8,9 +8,11 @@
 
 import UIKit
 
-class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISplitViewControllerDelegate {
     
     @IBOutlet var tableView: UITableView!
+    
+    let traits = UITraitCollection()
     
     lazy var refresher: UIRefreshControl = {
         let refresher = UIRefreshControl()
@@ -20,14 +22,34 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         return refresher
     }()
     
+    // Used to refresh the stock prices from the refresh pull-down
     @objc private func refreshStockPrices(_ sender: Any) {
         downloadStockPerformanceData(forTickers: defaultTickerSymbols)
+    }
+    
+    override func awakeFromNib() {
+        splitViewController?.delegate = self
+    }
+    
+    // Collapses the master view controller onto the details view controller if the horizontal size class (i.e. iPhone SE/6/7/8) of the user's device is compact
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        switch traits.horizontalSizeClass {
+        case .compact:
+            return true
+        case .regular:
+            return false
+        case .unspecified:
+            return true
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        self.splitViewController?.delegate = self
+        // Presents the master view controller on launch without having to swip-to-show
+        self.splitViewController?.preferredDisplayMode = .allVisible
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refresher
         } else {
@@ -60,7 +82,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
                     self.performanceData.append(index)
                 }
                 print(self.performanceData)
-                // Delay reload/end refreshing for 3/4 second until so user has chance to see refresher text
+                // Delay reload/end refreshing for 3/4 second so user has chance to see refresher text
                 let delayRefresh = DispatchTime.now() + .milliseconds(750)
                 DispatchQueue.main.asyncAfter(deadline: delayRefresh) {
                     self.tableView.reloadData()

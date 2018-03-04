@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6627277B204B2C3300BD2522 /* StockCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6627277A204B2C3300BD2522 /* StockCellTableViewCell.swift */; };
+		6688AC78204BD0AE00F41E17 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6688AC77204BD0AE00F41E17 /* DetailViewController.swift */; };
+		6688AC7A204BD0C900F41E17 /* DetailStockPerformanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6688AC79204BD0C900F41E17 /* DetailStockPerformanceData.swift */; };
 		66F4A0E3204A202700976039 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4A0E2204A202700976039 /* AppDelegate.swift */; };
 		66F4A0E5204A202700976039 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4A0E4204A202700976039 /* MainViewController.swift */; };
 		66F4A0E8204A202700976039 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F4A0E6204A202700976039 /* Main.storyboard */; };
@@ -37,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		6627277A204B2C3300BD2522 /* StockCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockCellTableViewCell.swift; sourceTree = "<group>"; };
+		6688AC77204BD0AE00F41E17 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		6688AC79204BD0C900F41E17 /* DetailStockPerformanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailStockPerformanceData.swift; sourceTree = "<group>"; };
 		66F4A0DF204A202700976039 /* SlickStocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlickStocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66F4A0E2204A202700976039 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		66F4A0E4204A202700976039 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +82,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6688AC74204BB7F000F41E17 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				66F4A0E4204A202700976039 /* MainViewController.swift */,
+				6688AC77204BD0AE00F41E17 /* DetailViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		6688AC75204BB81800F41E17 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				66F4A111204A5EEB00976039 /* MainStockPerformanceData.swift */,
+				6688AC79204BD0C900F41E17 /* DetailStockPerformanceData.swift */,
+				6627277A204B2C3300BD2522 /* StockCellTableViewCell.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6688AC76204BB85600F41E17 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				66F4A0EB204A202700976039 /* LaunchScreen.storyboard */,
+				66F4A0E6204A202700976039 /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		66F4A0D6204A202700976039 = {
 			isa = PBXGroup;
 			children = (
@@ -101,11 +133,11 @@
 		66F4A0E1204A202700976039 /* SlickStocks */ = {
 			isa = PBXGroup;
 			children = (
-				66F4A0E2204A202700976039 /* AppDelegate.swift */,
-				66F4A0E6204A202700976039 /* Main.storyboard */,
-				66F4A110204A5E6E00976039 /* MainViewController */,
 				66F4A0E9204A202700976039 /* Assets.xcassets */,
-				66F4A0EB204A202700976039 /* LaunchScreen.storyboard */,
+				66F4A0E2204A202700976039 /* AppDelegate.swift */,
+				6688AC74204BB7F000F41E17 /* View Controllers */,
+				6688AC76204BB85600F41E17 /* Views */,
+				6688AC75204BB81800F41E17 /* Models */,
 				66F4A0EE204A202700976039 /* Info.plist */,
 			);
 			path = SlickStocks;
@@ -127,16 +159,6 @@
 				66F4A104204A202700976039 /* Info.plist */,
 			);
 			path = SlickStocksUITests;
-			sourceTree = "<group>";
-		};
-		66F4A110204A5E6E00976039 /* MainViewController */ = {
-			isa = PBXGroup;
-			children = (
-				66F4A0E4204A202700976039 /* MainViewController.swift */,
-				6627277A204B2C3300BD2522 /* StockCellTableViewCell.swift */,
-				66F4A111204A5EEB00976039 /* MainStockPerformanceData.swift */,
-			);
-			path = MainViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,7 +297,9 @@
 			files = (
 				66F4A112204A5EEB00976039 /* MainStockPerformanceData.swift in Sources */,
 				66F4A0E5204A202700976039 /* MainViewController.swift in Sources */,
+				6688AC78204BD0AE00F41E17 /* DetailViewController.swift in Sources */,
 				6627277B204B2C3300BD2522 /* StockCellTableViewCell.swift in Sources */,
+				6688AC7A204BD0C900F41E17 /* DetailStockPerformanceData.swift in Sources */,
 				66F4A0E3204A202700976039 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
