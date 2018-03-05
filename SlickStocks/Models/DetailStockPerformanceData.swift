@@ -10,13 +10,14 @@ import Foundation
 
 struct DetailStockPerformanceData: Codable {
     let metaData: MetaData
-    let timeSeriesDaily: [String: [String: String]]
+    let timeSeriesDaily: [String: [String:String]]
     
     enum CodingKeys: String, CodingKey {
         case metaData = "Meta Data"
         case timeSeriesDaily = "Time Series (Daily)"
     }
 }
+
 
 struct MetaData: Codable {
     let information: String

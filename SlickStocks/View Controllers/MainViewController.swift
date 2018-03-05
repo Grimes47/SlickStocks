@@ -13,6 +13,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var tableView: UITableView!
     
     let traits = UITraitCollection()
+    var tableViewSymbolToPass: String?
+    var tableViewPriceToPass: String?
     
     lazy var refresher: UIRefreshControl = {
         let refresher = UIRefreshControl()
@@ -31,7 +33,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         splitViewController?.delegate = self
     }
     
-    // Collapses the master view controller onto the details view controller if the horizontal size class (i.e. iPhone SE/6/7/8) of the user's device is compact
+     //Collapses the master view controller onto the details view controller if the horizontal size class (i.e. iPhone SE/6/7/8) of the user's device is compact
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         switch traits.horizontalSizeClass {
         case .compact:
@@ -42,13 +44,13 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             return true
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         self.splitViewController?.delegate = self
-        // Presents the master view controller on launch without having to swip-to-show
+        //Presents the master view controller on launch without having to swip-to-show
         self.splitViewController?.preferredDisplayMode = .allVisible
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refresher
@@ -62,7 +64,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     let defaultTickerSymbols = ["NKE","MSFT","AAPL","GOOG","ORCL","COST","AMZN","WMT","GE","XOM","CVX","GM","VLO","BA","WAG","AIG","PFE","DOW","UPS","DELL","LMT","BBY","DIS"]
-    var performanceData = [MainStockPerformanceData]()
+    
+    private var performanceData = [MainStockPerformanceData]()
 
     func downloadStockPerformanceData(forTickers ticker: [String]) {
         
@@ -81,7 +84,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
                 for index in jsonData.stockQuotes {
                     self.performanceData.append(index)
                 }
-                print(self.performanceData)
                 // Delay reload/end refreshing for 3/4 second so user has chance to see refresher text
                 let delayRefresh = DispatchTime.now() + .milliseconds(750)
                 DispatchQueue.main.asyncAfter(deadline: delayRefresh) {
@@ -109,5 +111,18 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         return cell
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            guard let detailVC = segue.destination as? DetailViewController else { return }
+        
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let selectedCell = tableView.cellForRow(at: indexPath) as! StockCellTableViewCell
+                tableViewSymbolToPass = selectedCell.tickerSymbol.text
+                tableViewPriceToPass = selectedCell.price.text
+                if let symbol = tableViewSymbolToPass, let price = tableViewPriceToPass {
+                    detailVC.tickerSymbolFromSelectedRow = symbol
+                    detailVC.priceFromSelectedRow = price
+                }
+        }
+    }
 }

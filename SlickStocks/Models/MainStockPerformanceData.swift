@@ -34,4 +34,3 @@ struct MainStockPerformanceData: Decodable {
         case timeStamp = "4. timestamp"
     }
 }
-

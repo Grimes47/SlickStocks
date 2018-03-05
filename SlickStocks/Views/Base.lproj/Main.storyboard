@@ -22,28 +22,28 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MainStockCell" rowHeight="107" id="kIU-FF-vD7" customClass="StockCellTableViewCell" customModule="SlickStocks" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MainStockCell" rowHeight="107" id="kIU-FF-vD7" customClass="StockCellTableViewCell" customModule="SlickStocks" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="107"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kIU-FF-vD7" id="sCj-yP-j6K">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="106.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A99-Ov-6Eh">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ticker" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A99-Ov-6Eh">
                                                     <rect key="frame" x="52" y="11" width="42" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HcH-NJ-rpc">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HcH-NJ-rpc">
                                                     <rect key="frame" x="149" y="12" width="42" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6hK-ai-Xae">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6hK-ai-Xae">
                                                     <rect key="frame" x="269" y="12" width="42" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -56,7 +56,7 @@
                                             <outlet property="price" destination="6hK-ai-Xae" id="ljE-aS-0N0"/>
                                             <outlet property="tickerSymbol" destination="A99-Ov-6Eh" id="PJL-iM-Vqq"/>
                                             <outlet property="volume" destination="HcH-NJ-rpc" id="i9U-kv-dTE"/>
-                                            <segue destination="Vss-cL-50P" kind="showDetail" id="U0z-57-oFw"/>
+                                            <segue destination="Vss-cL-50P" kind="showDetail" id="6oN-J6-hAW"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -93,10 +93,10 @@
             </objects>
             <point key="canvasLocation" x="-1334" y="429"/>
         </scene>
-        <!--View Controller-->
+        <!--Detail View Controller-->
         <scene sceneID="HMa-w7-d9B">
             <objects>
-                <viewController id="Vss-cL-50P" sceneMemberID="viewController">
+                <viewController id="Vss-cL-50P" customClass="DetailViewController" customModule="SlickStocks" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ten-mc-QnK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -147,6 +147,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="cfQ-lB-0Po"/>
                     </view>
+                    <connections>
+                        <outlet property="highPrice" destination="6Ia-qp-xUP" id="sqc-cr-lGH"/>
+                        <outlet property="lowPrice" destination="E1t-7R-HFu" id="3Uu-uc-Stk"/>
+                        <outlet property="percentChange" destination="M49-rQ-Fwk" id="Yip-Bo-ako"/>
+                        <outlet property="price" destination="Vbg-jh-Eda" id="JXI-Mz-bXA"/>
+                        <outlet property="tickerSymbol" destination="ebT-zv-vnj" id="wP2-69-SrG"/>
+                        <outlet property="volume" destination="AMr-vn-x5l" id="X2L-vt-rki"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fhf-7C-8o6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -172,6 +180,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="U0z-57-oFw"/>
+        <segue reference="6oN-J6-hAW"/>
     </inferredMetricsTieBreakers>
 </document>
