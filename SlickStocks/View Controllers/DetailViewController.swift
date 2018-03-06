@@ -20,6 +20,8 @@ class DetailViewController: UIViewController {
     
     @IBOutlet var detailCompanyLogo: UIImageView!
     
+    @IBOutlet weak var activitySpinner: UIActivityIndicatorView!
+    
     var tickerSymbolFromSelectedRow: String?
     var priceFromSelectedRow: String?
     var logoFromSelectedRow: UIImage?
@@ -55,14 +57,13 @@ class DetailViewController: UIViewController {
             downloadDetailStockPerformanceData(forTicker: ticker)
         }
         setLabels()
-        print(currentDate)
-        print(tickerSymbolFromSelectedRow)
     }
     
    
 
     func downloadDetailStockPerformanceData(forTicker ticker: String) {
         
+        activitySpinner.startAnimating()
         let urlString = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(ticker)&apikey=MPXXRDLBCJO7Y2KK"
         guard let url = URL(string: urlString) else
         { return }
@@ -72,9 +73,7 @@ class DetailViewController: UIViewController {
             do {
                 let jsonData = try JSONDecoder().decode(DetailStockPerformanceData.self, from: data)
                 self.detailStockPerformanceData = jsonData
-                //Delay reload/end refreshing for 3/4 second so user has chance to see refresher text
-                let delayRefresh = DispatchTime.now() + .milliseconds(750)
-                DispatchQueue.main.asyncAfter(deadline: delayRefresh) {
+                DispatchQueue.main.async {
                     self.setLabels()
                 }
             } catch let error {
@@ -84,30 +83,39 @@ class DetailViewController: UIViewController {
             }.resume()
     }
     
-//    func calculateChangeInStockPrice(forToday today: String) {
-//        if let data = detailStockPerformanceData {
-//            if let currentPrice = priceFromSelectedRow?.convertToDecimal(), let todayOpen = data.timeSeriesDaily[today]?["1. open"]?.convertToDecimal() {
-//                print(currentPrice)
-//                print(todayOpen)
-//
-//                let stockPriceChange = (todayOpen - currentPrice)
-//                priceChange.text = String(describing: stockPriceChange)
-//                }
-//            }
-//        }
+    // Determines the current value of the stock price against its opening price for the day
+    func calculateChangeInStockPrice(forToday today: String) {
+        if let data = detailStockPerformanceData {
+            if let currentPrice = priceFromSelectedRow?.convertToDecimal(), let todayOpen = data.timeSeriesDaily[today]?["1. open"]?.convertToDecimal() {
+
+                let stockPriceChange = (todayOpen - currentPrice)
+                let result = stockPriceChange.roundDecimalCurrency()
+                
+                if stockPriceChange >= 0 {
+                    priceChange.textColor = .green
+                    priceChange.text = ("(+\(result))")
+                } else if stockPriceChange < 0 {
+                    priceChange.textColor = .red
+                    priceChange.text = ("(\(result))")
+                }
+                //priceChange.text = ("\(result)")
+                }
+            }
+        }
     
     func setLabels() {
         if let tickerSymbol = tickerSymbolFromSelectedRow, let price = priceFromSelectedRow, let logo = logoFromSelectedRow {
             self.tickerSymbol.text = tickerSymbol
-            self.price.text = price
+            self.price.text = ("$\(price.convertToDecimal().roundDecimal())")
             self.detailCompanyLogo.image = logo
             }
         if let data = detailStockPerformanceData {
-            if let open = data.timeSeriesDaily[currentDate]?["1. open"], let high = data.timeSeriesDaily[currentDate]?["2. high"], let low = data.timeSeriesDaily[currentDate]?["3. low"], let close = data.timeSeriesDaily[currentDate]?["4. close"], let volume = data.timeSeriesDaily[currentDate]?["5. volume"] {
+            if let high = data.timeSeriesDaily[currentDate]?["2. high"], let low = data.timeSeriesDaily[currentDate]?["3. low"], let volume = data.timeSeriesDaily[currentDate]?["5. volume"] {
             highPrice.text = ("$\(high.convertToDecimal().roundDecimal())")
             lowPrice.text = ("$\(low.convertToDecimal().roundDecimal())")
             self.volume.text = volume.convertToDecimal().decimalNoFractions()
-//            calculateChangeInStockPrice(forToday: currentDate)
+            calculateChangeInStockPrice(forToday: currentDate)
+            activitySpinner.stopAnimating()
             }
         }
     }

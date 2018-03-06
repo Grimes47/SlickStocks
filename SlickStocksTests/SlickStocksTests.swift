@@ -11,6 +11,41 @@ import XCTest
 
 class SlickStocksTests: XCTestCase {
     
+    func testDecimalConversion() {
+        let string = "123.65"
+        let decimal: Decimal = 123.65
+        let convertedString = string.convertToDecimal()
+        
+        XCTAssertEqual(convertedString, decimal)
+        
+    }
+    
+    func testRoundDecimalCurrency() {
+        let decimal: Decimal = 123.658
+        let convertedToCurrency = "$123.66"
+        let converted = decimal.roundDecimalCurrency()
+        
+        XCTAssertEqual(convertedToCurrency, converted)
+    }
+    
+    func testDecimalNoFractions() {
+        let decimal: Decimal = 123.56
+        let string = "124"
+        let converted = decimal.decimalNoFractions()
+        
+        XCTAssertEqual(converted, string)
+    }
+    
+    func testRoundDecimal() {
+        let decimal: Decimal = 123.56789
+        let string = "123.57"
+        let converted = decimal.roundDecimal()
+        
+        XCTAssertEqual(string, converted)
+    }
+    
+    
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -26,11 +61,5 @@ class SlickStocksTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
     
 }
