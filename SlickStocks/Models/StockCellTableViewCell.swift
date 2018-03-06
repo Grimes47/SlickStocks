@@ -11,12 +11,12 @@ import UIKit
 class StockCellTableViewCell: UITableViewCell {
 
     @IBOutlet var tickerSymbol: UILabel!
-    @IBOutlet var volume: UILabel!
     @IBOutlet var price: UILabel!
+    @IBOutlet var companyLogo: UIImageView!
     
-    func setTickerLabels(ticker: MainStockPerformanceData) {
+    func setTickerLabels(ticker: MainStockPerformanceData, logo: UIImage) {
         tickerSymbol.text = ticker.symbol
-        volume.text = ticker.volume
-        price.text = ticker.price
+        price.text = ("$\(ticker.price.convertToDecimal().roundDecimal())")
+        companyLogo.image = logo
     }
 }

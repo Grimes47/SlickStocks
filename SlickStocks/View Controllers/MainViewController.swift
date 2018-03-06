@@ -15,6 +15,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     let traits = UITraitCollection()
     var tableViewSymbolToPass: String?
     var tableViewPriceToPass: String?
+    var tableViewLogoToPass: UIImage?
     
     lazy var refresher: UIRefreshControl = {
         let refresher = UIRefreshControl()
@@ -59,8 +60,13 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         downloadStockPerformanceData(forTickers: defaultTickerSymbols)
+        // Forces un-highlight of row when coming back to the main VC from the detail VC
+        let selectedRow = tableView.indexPathForSelectedRow
+        if let rowIsSelected = selectedRow {
+            tableView.deselectRow(at: rowIsSelected, animated: true)
+        }
     }
     
     let defaultTickerSymbols = ["NKE","MSFT","AAPL","GOOG","ORCL","COST","AMZN","WMT","GE","XOM","CVX","GM","VLO","BA","WAG","AIG","PFE","DOW","UPS","DELL","LMT","BBY","DIS"]
@@ -80,6 +86,9 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             guard let data = data else { return }
             do {
                 let jsonData = try JSONDecoder().decode(StockQuotes.self, from: data)
+                if self.performanceData.isEmpty != true {
+                    self.performanceData.removeAll()
+                }
                 // Append parsed JSON data into global array for retrieval
                 for index in jsonData.stockQuotes {
                     self.performanceData.append(index)
@@ -107,9 +116,10 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MainStockCell") as! StockCellTableViewCell
         
-        cell.setTickerLabels(ticker: stock)
+        cell.setTickerLabels(ticker: stock, logo: UIImage.init(named: "\(performanceData[indexPath.row].symbol)")!)
         
         return cell
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -119,10 +129,41 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
                 let selectedCell = tableView.cellForRow(at: indexPath) as! StockCellTableViewCell
                 tableViewSymbolToPass = selectedCell.tickerSymbol.text
                 tableViewPriceToPass = selectedCell.price.text
-                if let symbol = tableViewSymbolToPass, let price = tableViewPriceToPass {
+                tableViewLogoToPass = selectedCell.companyLogo.image
+                if let symbol = tableViewSymbolToPass, let price = tableViewPriceToPass, let logo = tableViewLogoToPass {
                     detailVC.tickerSymbolFromSelectedRow = symbol
                     detailVC.priceFromSelectedRow = price
+                    detailVC.logoFromSelectedRow = logo
                 }
         }
     }
 }
+
+extension String {
+    func convertToDecimal() -> Decimal {
+        let formatter = NumberFormatter()
+        formatter.generatesDecimalNumbers = true
+        return formatter.number(from: self) as! Decimal
+    }
+}
+extension Decimal {
+    func roundDecimal() -> String {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        formatter.numberStyle = .decimal
+        return formatter.string(from: self as NSDecimalNumber)!
+    }
+}
+
+extension Decimal {
+    func decimalNoFractions() -> String {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
+        formatter.numberStyle = .decimal
+        return formatter.string(from: self as NSDecimalNumber)!
+    }
+}
+
+

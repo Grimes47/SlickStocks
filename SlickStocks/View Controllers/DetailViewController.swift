@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 class DetailViewController: UIViewController {
     
@@ -14,11 +15,14 @@ class DetailViewController: UIViewController {
     @IBOutlet var price: UILabel!
     @IBOutlet var highPrice: UILabel!
     @IBOutlet var lowPrice: UILabel!
-    @IBOutlet var percentChange: UILabel!
+    @IBOutlet var priceChange: UILabel!
     @IBOutlet var volume: UILabel!
+    
+    @IBOutlet var detailCompanyLogo: UIImageView!
     
     var tickerSymbolFromSelectedRow: String?
     var priceFromSelectedRow: String?
+    var logoFromSelectedRow: UIImage?
     
     private var detailStockPerformanceData: DetailStockPerformanceData?
     
@@ -29,6 +33,15 @@ class DetailViewController: UIViewController {
         let result = formatter.string(from: date)
         return result
     }()
+    
+    private var yesterdayDate: String = {
+        let date = Date().yesterday
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let result = formatter.string(from: date)
+        return result
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +55,8 @@ class DetailViewController: UIViewController {
             downloadDetailStockPerformanceData(forTicker: ticker)
         }
         setLabels()
+        print(currentDate)
+        print(tickerSymbolFromSelectedRow)
     }
     
    
@@ -69,18 +84,38 @@ class DetailViewController: UIViewController {
             }.resume()
     }
     
+//    func calculateChangeInStockPrice(forToday today: String) {
+//        if let data = detailStockPerformanceData {
+//            if let currentPrice = priceFromSelectedRow?.convertToDecimal(), let todayOpen = data.timeSeriesDaily[today]?["1. open"]?.convertToDecimal() {
+//                print(currentPrice)
+//                print(todayOpen)
+//
+//                let stockPriceChange = (todayOpen - currentPrice)
+//                priceChange.text = String(describing: stockPriceChange)
+//                }
+//            }
+//        }
+    
     func setLabels() {
-        if let tickerSymbol = tickerSymbolFromSelectedRow, let price = priceFromSelectedRow {
+        if let tickerSymbol = tickerSymbolFromSelectedRow, let price = priceFromSelectedRow, let logo = logoFromSelectedRow {
             self.tickerSymbol.text = tickerSymbol
-            self.price.text = ("$\(price)")
+            self.price.text = price
+            self.detailCompanyLogo.image = logo
             }
         if let data = detailStockPerformanceData {
-            if let open = data.timeSeriesDaily["2018-03-02"]?["1. open"], let high = data.timeSeriesDaily["2018-03-02"]?["2. high"], let low = data.timeSeriesDaily["2018-03-02"]?["3. low"], let close = data.timeSeriesDaily["2018-03-02"]?["4. close"], let volume = data.timeSeriesDaily["2018-03-02"]?["5. volume"] {
-            highPrice.text = high
-            lowPrice.text = low
-            self.volume.text = volume
+            if let open = data.timeSeriesDaily[currentDate]?["1. open"], let high = data.timeSeriesDaily[currentDate]?["2. high"], let low = data.timeSeriesDaily[currentDate]?["3. low"], let close = data.timeSeriesDaily[currentDate]?["4. close"], let volume = data.timeSeriesDaily[currentDate]?["5. volume"] {
+            highPrice.text = ("$\(high.convertToDecimal().roundDecimal())")
+            lowPrice.text = ("$\(low.convertToDecimal().roundDecimal())")
+            self.volume.text = volume.convertToDecimal().decimalNoFractions()
+//            calculateChangeInStockPrice(forToday: currentDate)
             }
-    
         }
     }
 }
+
+extension Date {
+    var yesterday: Date {
+        return Calendar.current.date(byAdding: .day, value: -1, to: self)!
+    }
+}
+
