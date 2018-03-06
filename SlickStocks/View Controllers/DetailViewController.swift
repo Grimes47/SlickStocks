@@ -73,9 +73,7 @@ class DetailViewController: UIViewController {
             do {
                 let jsonData = try JSONDecoder().decode(DetailStockPerformanceData.self, from: data)
                 self.detailStockPerformanceData = jsonData
-                //Delay reload/end refreshing for 3/4 second so user has chance to see refresher text
-                let delayRefresh = DispatchTime.now() + .milliseconds(750)
-                DispatchQueue.main.asyncAfter(deadline: delayRefresh) {
+                DispatchQueue.main.async {
                     self.setLabels()
                 }
             } catch let error {
@@ -95,10 +93,12 @@ class DetailViewController: UIViewController {
                 
                 if stockPriceChange >= 0 {
                     priceChange.textColor = .green
+                    priceChange.text = ("(+\(result))")
                 } else if stockPriceChange < 0 {
                     priceChange.textColor = .red
+                    priceChange.text = ("(\(result))")
                 }
-                priceChange.text = result
+                //priceChange.text = ("\(result)")
                 }
             }
         }
