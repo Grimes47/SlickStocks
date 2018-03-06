@@ -17,6 +17,9 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     var tableViewPriceToPass: String?
     var tableViewLogoToPass: UIImage?
     
+    @IBOutlet weak var activitySpinner: UIActivityIndicatorView!
+    
+    
     lazy var refresher: UIRefreshControl = {
         let refresher = UIRefreshControl()
         refresher.addTarget(self, action: #selector(refreshStockPrices(_:)), for: .valueChanged)
@@ -97,6 +100,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
                 let delayRefresh = DispatchTime.now() + .milliseconds(750)
                 DispatchQueue.main.asyncAfter(deadline: delayRefresh) {
                     self.tableView.reloadData()
+                    self.activitySpinner.stopAnimating()
                     self.refresher.endRefreshing()
                 }
                 
@@ -120,6 +124,12 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         return cell
         
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let stock = performanceData[indexPath.row]
+        tableViewPriceToPass = stock.price
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -128,7 +138,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             if let indexPath = tableView.indexPathForSelectedRow {
                 let selectedCell = tableView.cellForRow(at: indexPath) as! StockCellTableViewCell
                 tableViewSymbolToPass = selectedCell.tickerSymbol.text
-                tableViewPriceToPass = selectedCell.price.text
                 tableViewLogoToPass = selectedCell.companyLogo.image
                 if let symbol = tableViewSymbolToPass, let price = tableViewPriceToPass, let logo = tableViewLogoToPass {
                     detailVC.tickerSymbolFromSelectedRow = symbol
@@ -146,6 +155,18 @@ extension String {
         return formatter.number(from: self) as! Decimal
     }
 }
+
+extension Decimal {
+    func roundDecimalCurrency() -> String {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        formatter.locale = Locale.current
+        formatter.numberStyle = .currency
+        return formatter.string(from: self as NSDecimalNumber)!
+    }
+}
+
 extension Decimal {
     func roundDecimal() -> String {
         let formatter = NumberFormatter()
