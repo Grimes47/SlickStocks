@@ -53,34 +53,19 @@ class DetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         // Use the ticker symbol received from the main VC tableView cell to launch the detailed VC JSON download
-        if let ticker = tickerSymbolFromSelectedRow {
-            downloadDetailStockPerformanceData(forTicker: ticker)
-        }
+        downloadSingleStockData()
         setLabels()
     }
     
-   
-
-    func downloadDetailStockPerformanceData(forTicker ticker: String) {
-        
-        activitySpinner.startAnimating()
-        let urlString = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(ticker)&apikey=MPXXRDLBCJO7Y2KK"
-        guard let url = URL(string: urlString) else
-        { return }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data else { return }
-            do {
-                let jsonData = try JSONDecoder().decode(DetailStockPerformanceData.self, from: data)
-                self.detailStockPerformanceData = jsonData
+    func downloadSingleStockData() {
+        if let ticker = tickerSymbolFromSelectedRow {
+            NetworkCalls.shared.downloadSingleStockPerformanceData(forTicker: ticker) { (completion) in
+                self.detailStockPerformanceData = completion
                 DispatchQueue.main.async {
                     self.setLabels()
                 }
-            } catch let error {
-                print("Error serializing JSON data:", error)
             }
-            
-            }.resume()
+        }
     }
     
     // Determines the current value of the stock price against its opening price for the day
@@ -97,8 +82,7 @@ class DetailViewController: UIViewController {
                 } else if stockPriceChange < 0 {
                     priceChange.textColor = .red
                     priceChange.text = ("(\(result))")
-                }
-                //priceChange.text = ("\(result)")
+                    }
                 }
             }
         }
@@ -118,12 +102,6 @@ class DetailViewController: UIViewController {
             activitySpinner.stopAnimating()
             }
         }
-    }
-}
-
-extension Date {
-    var yesterday: Date {
-        return Calendar.current.date(byAdding: .day, value: -1, to: self)!
     }
 }
 

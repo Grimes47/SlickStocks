@@ -30,7 +30,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // Used to refresh the stock prices from the refresh pull-down
     @objc private func refreshStockPrices(_ sender: Any) {
-        downloadStockPerformanceData(forTickers: defaultTickerSymbols)
+        downloadBatchStockData()
     }
     
     override func awakeFromNib() {
@@ -64,7 +64,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        downloadStockPerformanceData(forTickers: defaultTickerSymbols)
+        downloadBatchStockData()
         // Forces un-highlight of row when coming back to the main VC from the detail VC
         let selectedRow = tableView.indexPathForSelectedRow
         if let rowIsSelected = selectedRow {
@@ -75,40 +75,25 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     let defaultTickerSymbols = ["NKE","MSFT","AAPL","GOOG","ORCL","COST","AMZN","WMT","GE","XOM","CVX","GM","VLO","BA","WAG","AIG","PFE","DOW","UPS","DELL","LMT","BBY","DIS"]
     
     private var performanceData = [MainStockPerformanceData]()
-
-    func downloadStockPerformanceData(forTickers ticker: [String]) {
-        
-        // Converts the ticker of type Array into type String for use in URL request with multiple tickers
-        let tickerString = ticker.joined(separator: ",")
-        
-        let urlString = "https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=\(tickerString)&apikey=MPXXRDLBCJO7Y2KK"
-        guard let url = URL(string: urlString) else
-            { return }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data else { return }
-            do {
-                let jsonData = try JSONDecoder().decode(StockQuotes.self, from: data)
-                if self.performanceData.isEmpty != true {
-                    self.performanceData.removeAll()
-                }
-                // Append parsed JSON data into global array for retrieval
-                for index in jsonData.stockQuotes {
-                    self.performanceData.append(index)
-                }
-                // Delay reload/end refreshing for 3/4 second so user has chance to see refresher text
-                let delayRefresh = DispatchTime.now() + .milliseconds(750)
-                DispatchQueue.main.asyncAfter(deadline: delayRefresh) {
-                    self.tableView.reloadData()
-                    self.activitySpinner.stopAnimating()
-                    self.refresher.endRefreshing()
-                }
-                
-            } catch let error {
-                print("Error serializing JSON data:", error)
-            }
     
-        }.resume()
+    func downloadBatchStockData() {
+        //downloadStockPerformanceData(forTickers: defaultTickerSymbols)
+        NetworkCalls.shared.downloadBatchStockPerformanceData(forTickers: defaultTickerSymbols) { (completion) in
+            if self.performanceData.isEmpty != true {
+                self.performanceData.removeAll()
+            }
+            // Append parsed JSON data into global array for retrieval
+            for index in completion.stockQuotes {
+                self.performanceData.append(index)
+            }
+            // Delay reload/end refreshing for 3/4 second so user has chance to see refresher text
+            let delayRefresh = DispatchTime.now() + .milliseconds(750)
+            DispatchQueue.main.asyncAfter(deadline: delayRefresh) {
+                self.tableView.reloadData()
+                self.activitySpinner.stopAnimating()
+                self.refresher.endRefreshing()
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
