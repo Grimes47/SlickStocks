@@ -58,11 +58,14 @@ class DetailViewController: UIViewController {
     }
     
     func downloadSingleStockData() {
+        
         if let ticker = tickerSymbolFromSelectedRow {
+            activitySpinner.startAnimating()
             NetworkCalls.shared.downloadSingleStockPerformanceData(forTicker: ticker) { (completion) in
                 self.detailStockPerformanceData = completion
                 DispatchQueue.main.async {
                     self.setLabels()
+                    self.activitySpinner.stopAnimating()
                 }
             }
         }
