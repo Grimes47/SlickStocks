@@ -108,6 +108,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		66162892205A32AD007929D4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				6627277A204B2C3300BD2522 /* StockCellTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		6688AC74204BB7F000F41E17 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -122,7 +130,6 @@
 			children = (
 				66F4A111204A5EEB00976039 /* MainStockPerformanceData.swift */,
 				6688AC79204BD0C900F41E17 /* DetailStockPerformanceData.swift */,
-				6627277A204B2C3300BD2522 /* StockCellTableViewCell.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -161,12 +168,13 @@
 			children = (
 				66F4A0E9204A202700976039 /* Assets.xcassets */,
 				66F4A0E2204A202700976039 /* AppDelegate.swift */,
-				6613501C204F702C00725BF3 /* Extensions */,
 				66135019204F6FA900725BF3 /* Network */,
 				6688AC74204BB7F000F41E17 /* View Controllers */,
 				6688AC76204BB85600F41E17 /* Views */,
 				6688AC75204BB81800F41E17 /* Models */,
 				66F4A0EE204A202700976039 /* Info.plist */,
+				66162892205A32AD007929D4 /* Cells */,
+				6613501C204F702C00725BF3 /* Extensions */,
 			);
 			path = SlickStocks;
 			sourceTree = "<group>";

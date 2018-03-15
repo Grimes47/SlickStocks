@@ -8,10 +8,6 @@
 
 import Foundation
 
-struct StringExtensions {
-    
-}
-
 extension String {
     func convertToDecimal() -> Decimal {
         let formatter = NumberFormatter()

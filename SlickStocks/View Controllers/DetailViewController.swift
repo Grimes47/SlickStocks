@@ -90,6 +90,7 @@ class DetailViewController: UIViewController {
             }
         }
     
+    // Uses the variables set from the segue and the data pulled from the API to set all the necessary labels in the view and then stops the activity spinner
     func setLabels() {
         if let tickerSymbol = tickerSymbolFromSelectedRow, let price = priceFromSelectedRow, let logo = logoFromSelectedRow {
             self.tickerSymbol.text = tickerSymbol

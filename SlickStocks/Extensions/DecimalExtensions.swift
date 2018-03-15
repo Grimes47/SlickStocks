@@ -8,10 +8,6 @@
 
 import Foundation
 
-struct DecimalExtensions {
-    
-}
-    
     extension Decimal {
         func roundDecimalCurrency() -> String {
             let formatter = NumberFormatter()
