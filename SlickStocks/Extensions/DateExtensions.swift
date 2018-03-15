@@ -8,10 +8,6 @@
 
 import Foundation
 
-struct DateExtension {
-    
-}
-
 extension Date {
     var yesterday: Date {
         return Calendar.current.date(byAdding: .day, value: -1, to: self)!

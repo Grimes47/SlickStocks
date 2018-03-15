@@ -28,7 +28,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         return refresher
     }()
     
-    // Used to refresh the stock prices from the refresh pull-down
+    //Used to refresh the stock prices from the refresh pull-down
     @objc private func refreshStockPrices(_ sender: Any) {
         downloadBatchStockData()
     }
@@ -53,6 +53,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorColor = .clear
         self.splitViewController?.delegate = self
         //Presents the master view controller on launch without having to swip-to-show
         self.splitViewController?.preferredDisplayMode = .allVisible
@@ -65,7 +66,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         downloadBatchStockData()
-        // Forces un-highlight of row when coming back to the main VC from the detail VC
+        // Forces un-highlight of selected row when coming back to the main VC from the detail VC
         let selectedRow = tableView.indexPathForSelectedRow
         if let rowIsSelected = selectedRow {
             tableView.deselectRow(at: rowIsSelected, animated: true)
@@ -105,6 +106,13 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MainStockCell") as! StockCellTableViewCell
         
+        // Forces the cell border set to edge-to-edge on the display
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
+        // Sets the separator color for the cells back to default. The color is .clear in viewDidLoad to give the tableView time to set up the appropriate cell size
+        tableView.separatorColor = nil
+        
         cell.setTickerLabels(ticker: stock, logo: UIImage.init(named: "\(performanceData[indexPath.row].symbol)")!)
         
         return cell
@@ -113,6 +121,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        // Sets the stock ticker variable. This is passed to the detail VC via segue
         let stock = performanceData[indexPath.row]
         tableViewPriceToPass = stock.price
     }
