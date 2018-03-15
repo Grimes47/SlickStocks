@@ -13,12 +13,14 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var tableView: UITableView!
     
     let traits = UITraitCollection()
+    
     var tableViewSymbolToPass: String?
     var tableViewPriceToPass: String?
     var tableViewLogoToPass: UIImage?
     
     @IBOutlet weak var activitySpinner: UIActivityIndicatorView!
     
+    private var performanceData = [MainStockPerformanceData]()
     
     lazy var refresher: UIRefreshControl = {
         let refresher = UIRefreshControl()
@@ -75,7 +77,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     let defaultTickerSymbols = ["NKE","MSFT","AAPL","GOOG","ORCL","COST","AMZN","WMT","GE","XOM","CVX","GM","VLO","BA","WAG","AIG","PFE","DOW","UPS","DELL","LMT","BBY","DIS"]
     
-    private var performanceData = [MainStockPerformanceData]()
+    
     
     func downloadBatchStockData() {
         //downloadStockPerformanceData(forTickers: defaultTickerSymbols)

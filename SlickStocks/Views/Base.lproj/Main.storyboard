@@ -186,11 +186,11 @@
                                 <color key="color" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                             </activityIndicatorView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s0E-Q0-csh">
-                                <rect key="frame" x="214" y="85" width="133" height="88.5"/>
+                                <rect key="frame" x="229.5" y="85" width="117.5" height="80"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="s0E-Q0-csh" secondAttribute="height" multiplier="3:2" id="KZO-Uu-yG3"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="100" id="Oer-bo-gEY"/>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="r5a-VN-M5J"/>
+                                    <constraint firstAttribute="width" secondItem="s0E-Q0-csh" secondAttribute="height" multiplier="65:44" id="Kru-NX-jHT"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="80" id="Oer-bo-gEY"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="130" id="r5a-VN-M5J"/>
                                 </constraints>
                             </imageView>
                         </subviews>
