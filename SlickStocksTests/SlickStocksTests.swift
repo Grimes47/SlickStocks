@@ -75,9 +75,9 @@ class SlickStocksTests: XCTestCase {
     }
     
     func testSingleStockDownloads() {
-        let ticker = "NKE"
+        let tickerSymbol = "NKE"
         let expectation = XCTestExpectation(description: "Download single stock data")
-        NetworkCalls.shared.downloadSingleStockPerformanceData(forTicker: ticker) { (completion) in
+        NetworkCalls.shared.downloadSingleStockPerformanceData(forTicker: tickerSymbol) { (completion) in
             self.detailStockData = completion
             XCTAssertNotNil(self.detailStockData, "Data not downloaded properly")
             expectation.fulfill()
