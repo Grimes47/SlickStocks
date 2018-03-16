@@ -9,28 +9,43 @@
 import XCTest
 
 class SlickStocksUITests: XCTestCase {
+    
+    private var app: XCUIApplication!
         
     override func setUp() {
         super.setUp()
-        
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-        // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        app = XCUIApplication()
+        app.launch()
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func isPad() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
     }
     
+    func testNavBar() {
+        let navBar = app.navigationBars["Current Market"]
+        let cellNike = app.tables/*@START_MENU_TOKEN@*/.cells.staticTexts["NKE"]/*[[".cells.staticTexts[\"NKE\"]",".staticTexts[\"NKE\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/
+        cellNike.tap()
+        if isPad() {
+            XCTAssert(navBar.exists, "Did not load navigation bar title")
+        } else {
+            XCTAssertFalse(navBar.exists, "Did not segue properly")
+            let navBar2 = app.navigationBars["Stock"]
+            XCTAssert(navBar2.exists)
+            let button = navBar2.buttons["Current Market"]
+            button.tap()
+            XCTAssert(navBar.exists, "Did not segue properly")
+        }
+    }
+    
+    func testTickerDisplay() {
+        let display = app.staticTexts.matching(identifier: "ticker").firstMatch
+        app.tables/*@START_MENU_TOKEN@*/.cells.staticTexts["NKE"]/*[[".cells.staticTexts[\"NKE\"]",".staticTexts[\"NKE\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        XCTAssert(display.label == "NKE", "The label did not display the proper ticker symbol")
+    }
 }
